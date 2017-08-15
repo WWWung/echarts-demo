@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+      #wrap, #wrap2{
+        width: 600px;
+        height: 400px;
+        margin: 40px auto;
+      }
+    </style>
+    <script src="./echarts.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <div id="wrap"></div>
+    <div id="wrap2"></div>
+    <script>
+    //简单的模拟数据
+      var data = [
+        [2,4],
+        [3,9],
+        [4,16],
+        [5,25]
+      ]
+
+      var maxY = 25;
+      var maxX = 5;
+
+      var wrap = document.getElementById('wrap');
+      var chart1 = echarts.init(wrap);
+
+      var s1 = {
+        type: 'line',
+        data: data
+      }
+
+      var option = {
+        title: {text: '测试图1'},
+        xAxis: {
+          name: '横坐标',
+        },
+        yAxis: {
+          name: '纵坐标'
+        },
+        series: [s1]
+      }
+      chart1.setOption(option);
+
+
+      var wrap2 = document.getElementById('wrap2');
+      var chart2 = echarts.init(wrap2);
+
+      var s2 = {
+        type: 'line',
+        data: handleArr(data),
+        markLine: createScales([2,3,4,5],[4,9,16,25])
+      }
+      var option2 = {
+        title: {text: '测试图2'},
+        xAxis: {
+          name: '横坐标',
+          min:0,
+          max:getLog10(maxX),
+          splitLine:{show:false},
+          axisTick:{show:false},
+          axisLabel:{show:false}
+        },
+        yAxis: {
+          name: '纵坐标',
+          min:0,
+          max:getLog10(maxY),
+          splitLine:{show:false},
+          axisTick:{show:false},
+          axisLabel:{show:false}
+        },
+        series: [s2]
+      }
+
+      chart2.setOption(option2);
+
+      //传入横纵坐标的数组进行处理
+      function createScales(xValues,yValues){
+        var markLineDatas = [];
+         if(xValues){
+           for(var i=0;i<xValues.length;i++){
+             var xValue = xValues[i];
+             xValue = getLog10(xValue);
+             var data =  [
+                 { coord: [xValue, 0], name: xValues[i],  },
+                 { coord: [xValue, getLog10(25)], },
+             ];
+             markLineDatas.push(data);
+           }
+         }
+         if(yValues){
+           for(var i=0;i<yValues.length;i++){
+             var yValue = yValues[i];
+             yValue = getLog10(yValue);
+             var data =  [
+                 { coord: [0, yValue], name: yValues[i],  },
+                 { coord: [getLog10(maxX), yValue], },
+             ];
+             markLineDatas.push(data);
+           }
+         }
+
+
+         var markLine = {
+                 data : markLineDatas,
+                 symbol:['',''],
+                 label:{normal:{position:'start',}} ,
+                 lineStyle:{normal:{color:'black',width:1,type:'solid',opacity:0.4, }} ,
+                 animation:false,
+                 silent:true,
+             };
+         return markLine;
+      }
+
+      function handleArr(arr){
+        var resultArr = arr.map((item)=>{
+          var x = getLog10(item[0]);
+          var y = getLog10(item[1]);
+          return [x,y];
+        });
+        return resultArr;
+      }
+
+      function getLog10(val){
+        return Math.log(val)/Math.log(10);
+      }
+    </script>
+  </body>
+</html>
