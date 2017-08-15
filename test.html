@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title></title>
     <style>
-      #wrap, #wrap2{
+      #wrap, #wrap2, #wrap3{
         width: 600px;
         height: 400px;
         margin: 40px auto;
@@ -15,6 +15,7 @@
   <body>
     <div id="wrap"></div>
     <div id="wrap2"></div>
+    <div id="wrap3"></div>
     <script>
     /*
     *关于echarts的对数轴
@@ -140,6 +141,36 @@
       function getLog10(val){
         return Math.log(val)/Math.log(10);
       }
+
+
+      var wrap3 = document.getElementById('wrap3');
+      var chart3 = echarts.init(wrap3);
+      var opData = data.map((item)=>{
+        return [item[0],-item[1]];
+      })
+      var s3 = {
+        type: 'line',
+        data: opData
+      }
+      var option3 = {
+        title: {text: '测试图1'},
+        xAxis: {
+          name: '横坐标',
+          position: 'top',
+        },
+        yAxis: {
+          name: '纵坐标',
+          nameLocation: 'middle',
+          nameGap: 25,
+          axisLabel: {
+            formatter: function (v) {
+              return -v;
+            }
+          }
+        },
+        series: [s3]
+      }
+      chart3.setOption(option3)
     </script>
   </body>
 </html>
