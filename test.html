@@ -18,10 +18,10 @@
     <div id="wrap3"></div>
     <script>
     /*
-    *关于echarts的对数轴
-    *echarts有对数轴的处理，以下方法提供一种其他的思路（非原创）
-    *通过markline来模拟坐标轴，这种方法适用于其他的不均匀刻度轴
-    */
+     *关于echarts的对数轴
+     *echarts有对数轴的处理，以下方法提供一种其他的思路（非原创）
+     *通过markline来模拟坐标轴，这种方法适用于其他的不均匀刻度轴
+     */
 
 
 
@@ -43,8 +43,15 @@
       var chart1 = echarts.init(wrap);
 
       var s1 = {
+        name: 'line1',
         type: 'line',
         data: data
+      }
+
+      var s2 = {
+        name: 'line2',
+        type: 'line',
+        data: [[1,4],[2,8],[3,12],[4,16],[5,20]]
       }
 
       var option = {
@@ -55,11 +62,21 @@
         yAxis: {
           name: '纵坐标'
         },
-        series: [s1]
+        series: [s1,s2],
+        tooltip: {
+          trigger: 'axis',
+          formatter: function (param){
+            console.log(param);
+            return param[0].data[0] + "-"  + param[0].data[1];
+          }
+        },
+        legend: {
+          data: ['line1', 'line2']
+        }
       }
       chart1.setOption(option);
 
-
+//==============================================================================
       var wrap2 = document.getElementById('wrap2');
       var chart2 = echarts.init(wrap2);
 
@@ -142,7 +159,7 @@
         return Math.log(val)/Math.log(10);
       }
 
-
+//==============================================================================
       var wrap3 = document.getElementById('wrap3');
       var chart3 = echarts.init(wrap3);
       var opData = data.map((item)=>{
